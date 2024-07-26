@@ -4,7 +4,7 @@
   "description": "Kunden Anlegen in LIMA System",
   "type": "object",
   "properties": {
-    "kunde": {
+    "kunden": {
       "type": "object",
       "properties": {
         "typ": {
@@ -107,7 +107,7 @@
                       "adresseTyp": {
                         "type": "string",
                         "enum": [
-                          "Lieferungsadresse",
+                          "Lieferadresse",
                           "Rechnungsadresse"
                         ]
                       },
@@ -123,16 +123,22 @@
                       "hausnummerzusatz": {
                         "type": "string"
                       },
+                      "wohnungsnummer": {
+                        "type": "integer"
+                      },
                       "postleitzahl": {
                         "type": "string"
                       },
                       "postfach": {
                         "type": "string"
                       },
-                      "ort": {
+                      "ortsteil": {
                         "type": "string"
                       },
-                      "ortsteil": {
+                      "bezirk": {
+                        "type": "string"
+                      },
+                      "ort": {
                         "type": "string"
                       },
                       "land": {
@@ -188,7 +194,8 @@
                     "format": "date"
                   },
                   "steuernummer": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "^.{3}/.{3}/.{5}$"
                   },
                   "kontakt": {
                     "type": "array",
@@ -222,7 +229,7 @@
                         "adresseTyp": {
                           "type": "string",
                           "enum": [
-                            "Lieferungsadresse",
+                            "Lieferadresse",
                             "Rechnungsadresse"
                           ]
                         },
@@ -238,16 +245,22 @@
                         "hausnummerzusatz": {
                           "type": "string"
                         },
+                        "wohnungsnummer": {
+                          "type": "integer"
+                        },
                         "postleitzahl": {
                           "type": "string"
                         },
                         "postfach": {
                           "type": "string"
                         },
-                        "ort": {
+                        "ortsteil": {
                           "type": "string"
                         },
-                        "ortsteil": {
+                        "bezirk": {
+                          "type": "string"
+                        },
+                        "ort": {
                           "type": "string"
                         },
                         "land": {

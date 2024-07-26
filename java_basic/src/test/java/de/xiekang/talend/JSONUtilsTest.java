@@ -703,4 +703,156 @@ class JSONUtilsTest {
                 "}";
         System.out.println(JSONUtils.convertJSONToString(vertragErstellenResponse, "$.body.userInputJson"));
     }
+
+    @Test
+    void convertJSONToListOfMaps() {
+        String testJSON = "{\n" +
+                "    \"vertrag\": {\n" +
+                "        \"vertragsId\": \"xxxxxxxxx\",\n" +
+                "        \"vertragsart\": \"\",\n" +
+                "        \"sparte\": \"GAS\",\n" +
+                "        \"vertragsabschlussTyp\": \"D2D\",\n" +
+                "        \"vertragsabschlussDatum\": \"2024-01-03\",\n" +
+                "        \"vertragsstatus\": \"\",\n" +
+                "        \"tarifKennzeichen\": \"HT|NT\",\n" +
+                "        \"vertriebspartner\": \"\",\n" +
+                "        \"vertragspartner\": {\n" +
+                "            \"kundennummer\": \"123456789\",\n" +
+                "            \"debitornummer\": \"1\",\n" +
+                "            \"abschlag\": {\n" +
+                "                \"betrag\": 100.0,\n" +
+                "                \"mwStSatz\": 19.0,\n" +
+                "                \"waehrung\": \"EUR\",\n" +
+                "                \"frist\": \"MONAT\",\n" +
+                "                \"faelligkeitsdatum\": \"2024-04-01\"\n" +
+                "            }\n" +
+                "        },\n" +
+                "        \"vertragskonditionen\": {\n" +
+                "            \"kuendigungsfrist\": {\n" +
+                "                \"dauer\": 12,\n" +
+                "                \"einheit\": \"WOCHEN|TAG|MONAT\",\n" +
+                "                \"startdatum\": \"yyyy-MM-dd\",\n" +
+                "                \"enddatum\": \"yyyy-MM-dd\"\n" +
+                "            },\n" +
+                "            \"vertragslaufzeit\": {\n" +
+                "                \"dauer\": 12,\n" +
+                "                \"einheit\": \"WOCHEN|TAG|MONAT\",\n" +
+                "                \"startdatum\": \"yyyy-MM-dd\",\n" +
+                "                \"enddatum\": \"yyyy-MM-dd\" \n" +
+                "            },\n" +
+                "            \"vertragsverlaengerung\": {\n" +
+                "                \"dauer\": 12,\n" +
+                "                \"einheit\": \"WOCHEN|TAG|MONAT\", \n" +
+                "                \"startdatum\": \"yyyy-MM-dd\",\n" +
+                "                \"enddatum\": \"yyyy-MM-dd\"\n" +
+                "            }\n" +
+                "        },\n" +
+                "        \"verbrauchsstelle\": {\n" +
+                "            \"lieferbeginn\": \"yyyy-MM-dd\",\n" +
+                "            \"objektNummer\": \"xxxxxxxxx\",\n" +
+                "            \"netznutzungProduktId\": \"xxxxxxxxx\",\n" +
+                "            \"marktlokation\": {\n" +
+                "                \"marktlokationIdent\": \"xxxxxxxxxx\",\n" +
+                "                \"netzparameter\": {\n" +
+                "                    \"marktgebiet\": \"THE\",\n" +
+                "                    \"bilanzKreisKey\": \"\", \n" +
+                "                    \"netzebene\": \"\",\n" +
+                "                    \"konzessionsabgabe\": \"\",\n" +
+                "                    \"verteilnetz\": {\n" +
+                "                        \"netzbetreibercodenr\": \"\"\n" +
+                "                    }\n" +
+                "                }\n" +
+                "            },\n" +
+                "            \"messlokation\": {\n" +
+                "                \"messlokationsIdent\": \"xxxxxxxxxxxx\",\n" +
+                "                \"lastprofil\": \"H0\", \n" +
+                "                \"messebene\": \"XX\",\n" +
+                "                \"zaehler\": {\n" +
+                "                    \"geraetenummer\": \"\",\n" +
+                "                    \"messstellenbetreiber\": \"\"\n" +
+                "                }\n" +
+                "            }\n" +
+                "        },\n" +
+                "        \"prognostizierterVerbrauch\": [\n" +
+                "            {\n" +
+                "                \"attribute\": \"KWH/JAHR\",\n" +
+                "                \"wert\": 1500\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"attribute\": \"HaushaltAnzahl\",\n" +
+                "                \"wert\": 3\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"attribute\": \"HausGroesse in m2\",\n" +
+                "                \"wert\": 47.5\n" +
+                "            }\n" +
+                "        ],\n" +
+                "        \"tarif\": {\n" +
+                "            \"produktId\": \"\"\n" +
+                "        },\n" +
+                "        \"vertragSonstigeAttribute\": [\n" +
+                "            {\n" +
+                "                \"attribute\": \"zaehlerstand\",\n" +
+                "                \"wert\": 12345\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"attribute\": \"ablesekennzeichen\",\n" +
+                "                \"wert\": \"2\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"attribute\": \"ablesedatum\",\n" +
+                "                \"wert\": \"2024-01-01\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"attribute\": \"zugangsArt\",\n" +
+                "                \"wert\": \"BE\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"attribute\": \"energieSteuer\",\n" +
+                "                \"wert\": \"R\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"attribute\": \"abgangsart\",\n" +
+                "                \"wert\": \"\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"attribute\": \"versorgungsArt\",\n" +
+                "                \"wert\": \" \"\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"attribute\": \"laufzeitSync\",\n" +
+                "                \"wert\": true\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"attribute\": \"ereignisdatum\",\n" +
+                "                \"wert\": \"2024-06-14\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"attribute\": \"abrechnungsgruppen\",\n" +
+                "                \"wert\": \"Ablesung 30.01., Abrechnung 14.02.\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"attribute\": \"kundenGruppenSchluessel\",\n" +
+                "                \"wert\": \"675\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"attribute\": \"haendlerKuerzel\",\n" +
+                "                \"wert\": \"EVM \"\n" +
+                "            },\n" +
+                "            {\n" +
+                "                \"attribute\": \"prozessId\",\n" +
+                "                \"wert\": \"vertragssatz-ueberschreiben\"\n" +
+                "            }\n" +
+                "        ]\n" +
+                "    }\n" +
+                "}";
+        JSONUtils.convertToFlattenJSON(testJSON);
+    }
+
+    @Test
+    void convertStringToJSON() {
+        String test = "\"{\\\"Lastprofil\\\":\\\"H0\\\",\\\"Anschlusswert6\\\":0,\\\"BonusbetragBrutto\\\":0.00,\\\"Versorgungsart\\\":\\\"\\\",\\\"EinheitMindestlaufzeit\\\":\\\"\\\",\\\"Kuendigungsgrund\\\":\\\"\\\",\\\"Verbrauchsart\\\":\\\"\\\",\\\"LaufzeitSync\\\":true,\\\"Anschlusswert12\\\":0.00000,\\\"EinheitKuendigungsfrist2\\\":\\\"\\\",\\\"Marktgebiet\\\":\\\"\\\",\\\"Messdienstleister\\\":\\\"\\\",\\\"Abschlagsbeginn\\\":\\\"2024-07-25\\\",\\\"UebertragungEDMSysteme\\\":\\\"\\\",\\\"Typ\\\":\\\"\\\",\\\"Anschlusswert2\\\":0,\\\"AblesekennzeichenAlt\\\":\\\"\\\",\\\"AutrargsIdVertragsPartner\\\":\\\"\\\",\\\"Zeitreihentyp\\\":\\\"SLS\\\",\\\"Stromsteuer\\\":\\\"\\\",\\\"Netzkopplungspunkt\\\":\\\"\\\",\\\"HauptNebenzaehler\\\":\\\"\\\",\\\"WievieltesZaehlwerk\\\":1,\\\"Anschlusswert15\\\":0.00000,\\\"FreifeldCrm4\\\":\\\"\\\",\\\"InfoKennzeichen\\\":\\\"\\\",\\\"TempMessstelle\\\":\\\"\\\",\\\"FreifeldCrm6\\\":\\\"\\\",\\\"NummerHauptzaehler\\\":0,\\\"Kuendigungsfrist1\\\":1,\\\"BonusschablonenID\\\":0,\\\"prognVerbrauch\\\":0.00000,\\\"FreifeldCrm9\\\":\\\"\\\",\\\"MURefGerateNummer\\\":0,\\\"Zaehlerfabrikat\\\":0,\\\"Bonusbeibehalten\\\":\\\"\\\",\\\"UnterVertriebspartner\\\":\\\"\\\",\\\"Vertragsverlaengerung\\\":0,\\\"Ereignisdatum\\\":\\\"2024-07-24\\\",\\\"PSKommEinhMSB\\\":0,\\\"Sperrkennzeichen\\\":\\\"\\\",\\\"FreifeldCrm8\\\":\\\"\\\",\\\"Lieferart\\\":\\\"\\\",\\\"Zaehleinrichtung\\\":\\\"\\\",\\\"IDZaehlzeitMelo\\\":0,\\\"Netzbetreibernummer\\\":134,\\\"FreifeldCrm1\\\":\\\"\\\",\\\"VertragslaufzeitBis\\\":\\\"2024-08-25\\\",\\\"AbschlagsvorgabeistNull\\\":false,\\\"MURefGeraeteArt\\\":\\\"\\\",\\\"MindestlaufzeitBonus\\\":0,\\\"Vertriebspartner\\\":\\\"evm\\\",\\\"Lieferbeginn\\\":\\\"2024-07-24\\\",\\\"Anschlusswert1\\\":0,\\\"FabrikatHauptzaehler\\\":0,\\\"IDZaehlzeitRegisterMelo\\\":0,\\\"Provision\\\":0.00000000,\\\"FreifeldCrm5\\\":\\\"\\\",\\\"Marktlokation\\\":\\\"D0002710029\\\",\\\"wievieltesZaehlwerkHauptzaehler\\\":0,\\\"Kuendigungsfrist2\\\":0,\\\"ZaehlzeitRegisterMelo\\\":0,\\\"Anschlusswert4\\\":0,\\\"Abschlagsvorgabe\\\":120.00,\\\"Berechnen\\\":\\\"J\\\",\\\"Mehrwertsteuersatz\\\":0.0000,\\\"Kundengruppenschluessel\\\":15,\\\"Haendlerkennung\\\":\\\"EVM\\\",\\\"Energiemengenabrechnung\\\":\\\"\\\",\\\"Freifeld5\\\":\\\"\\\",\\\"KuendigungZum\\\":\\\"\\\",\\\"VertragslaufzeitVon\\\":\\\"2024-07-25\\\",\\\"FreifeldCrm2\\\":\\\"\\\",\\\"Obis\\\":\\\"1-1:1.8.0\\\",\\\"EnergieartHauptzaehler\\\":\\\"\\\",\\\"AbschlagsvorgabeBeibehalten\\\":true,\\\"Vertragsart\\\":\\\"\\\",\\\"Zaehlernummer\\\":0,\\\"HTNT\\\":\\\"\\\",\\\"AngemeldeterVerbrauch\\\":1500.00000,\\\"IDZaehlzeitMalo\\\":0,\\\"Steuerungskennzeichen\\\":\\\"\\\",\\\"PreisAusENET\\\":\\\"J\\\",\\\"MURefGeraeteFabrikat\\\":0,\\\"NettoBetragBonus\\\":0.00,\\\"PreisschluesselWandlUmwandlMSB\\\":0,\\\"VertragsmengeJahr\\\":0,\\\"Befestigungsart\\\":\\\"\\\",\\\"Forderungsbetrag\\\":120.00,\\\"Bilanzierungskreiskennung\\\":\\\"11XKEVAG-V-----7\\\",\\\"Anschlusswert9\\\":0,\\\"Einspeiselieferant\\\":\\\"\\\",\\\"TechnSteuereinr\\\":\\\"\\\",\\\"Zaehlerstand\\\":0,\\\"FreifeldCrm7\\\":\\\"\\\",\\\"IDZaehlzeitRegisterMalo\\\":0,\\\"MindestmengeJahr\\\":0,\\\"BonusText\\\":\\\"\\\",\\\"Waermenutzung\\\":\\\"\\\",\\\"Unterbrechbarkeit\\\":\\\"\\\",\\\"Anschlusswert5\\\":0,\\\"NettoBonusProzent\\\":0.00,\\\"Messstellenbetreiber\\\":\\\"\\\",\\\"Strasse\\\":\\\"\\\",\\\"angemMengebeibehalt\\\":\\\"\\\",\\\"Mengenumwertertyp\\\":\\\"\\\",\\\"Zaehlertyp\\\":\\\"\\\",\\\"additiv\\\":\\\"J\\\",\\\"Abrechnungskennzeichen\\\":\\\"\\\",\\\"Anschlusswert7\\\":0,\\\"Anschlusswert3\\\":0,\\\"Mandant\\\":\\\"V\\\",\\\"Oeffnungsklausel\\\":\\\"\\\",\\\"GeraeteartHauptzaehler\\\":\\\"\\\",\\\"EinheitKuenFrist1\\\":\\\"T\\\",\\\"FreifeldCrm10\\\":\\\"\\\",\\\"Ablesekarte\\\":696230706,\\\"Einmalabzug\\\":0,\\\"Kommunikationseinr\\\":\\\"\\\",\\\"Geraeteart\\\":\\\"ZF\\\",\\\"Anschlusswert11\\\":0.00000,\\\"Ablesekennzeichen\\\":\\\"\\\",\\\"Energieart\\\":\\\"E\\\",\\\"RWEKennzeichenHauptzaehler\\\":0,\\\"FreifeldCrm3\\\":\\\"\\\",\\\"ZaehlzeitRegisterMalo\\\":0,\\\"PreisschluesselAbrechnung\\\":0,\\\"SpezifischeArbeit\\\":0.000,\\\"MindestmengeBonus\\\":0.00,\\\"ZaehlerstandAlt\\\":0,\\\"Kundenwert\\\":0.0000,\\\"ProzessId\\\":22,\\\"Bezirk\\\":9231,\\\"EreignisdatumKey\\\":\\\"2024-07-26\\\",\\\"LetzteAenderung\\\":\\\"2024-07-25-15.05.22.872047\\\",\\\"VertragsID\\\":\\\"696230706E000000001\\\"}\"";
+        test = JSONUtils.convertStringToJSON(test);
+        System.out.println(JSONUtils.convertToFlattenJSON(test));
+    }
 }

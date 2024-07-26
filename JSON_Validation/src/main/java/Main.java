@@ -19,9 +19,9 @@ public class Main {
     public static void main(String[] args) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         JsonSchemaFactory factory = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7);
-        JsonSchema jsonSchema = factory.getSchema(Main.class.getResourceAsStream("/schema_vertrag_kuendigen.json"));
+        JsonSchema jsonSchema = factory.getSchema(Main.class.getResourceAsStream("/schema_vertrag.json"));
 
-        File file = new File(Objects.requireNonNull(Main.class.getResource("/testcases/vertrag/kuendigen")).getFile());
+        File file = new File(Objects.requireNonNull(Main.class.getResource("/testcases/vertrag")).getFile());
 
         for (File f : Objects.requireNonNull(file.listFiles())) {
             JsonNode jsonNode = mapper.readTree(new FileInputStream(f));
@@ -34,5 +34,6 @@ public class Main {
                 validationResult.forEach(vm -> System.out.println(vm.getMessage()));
             }
         }
+
     }
 }

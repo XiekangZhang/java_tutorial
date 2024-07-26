@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html class="login-pf">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="robots" content="noindex, nofollow">
+
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Sign in to lima 2.0 DEV / QM</title>
+    <link rel="icon" href="/auth/resources/axeyh/login/lima2v2/img/favicon.ico" />
+    <link href="/auth/resources/axeyh/common/keycloak/web_modules/@patternfly/react-core/dist/styles/base.css"
+          rel="stylesheet" />
+    <link href="/auth/resources/axeyh/common/keycloak/web_modules/@patternfly/react-core/dist/styles/app.css"
+          rel="stylesheet" />
+    <link href="/auth/resources/axeyh/common/keycloak/node_modules/patternfly/dist/css/patternfly.min.css"
+          rel="stylesheet" />
+    <link href="/auth/resources/axeyh/common/keycloak/node_modules/patternfly/dist/css/patternfly-additions.min.css"
+          rel="stylesheet" />
+    <link href="/auth/resources/axeyh/common/keycloak/lib/pficon/pficon.css" rel="stylesheet" />
+    <link href="/auth/resources/axeyh/common/keycloak/node_modules/rcue/dist/css/rcue.min.css" rel="stylesheet" />
+    <link href="/auth/resources/axeyh/common/keycloak/node_modules/rcue/dist/css/rcue-additions.min.css"
+          rel="stylesheet" />
+    <link href="/auth/resources/axeyh/login/lima2v2/node_modules/rcue/dist/css/rcue.min.css" rel="stylesheet" />
+    <link href="/auth/resources/axeyh/login/lima2v2/node_modules/rcue/dist/css/rcue-additions.min.css"
+          rel="stylesheet" />
+    <link href="/auth/resources/axeyh/login/lima2v2/lib/zocial/zocial.css" rel="stylesheet" />
+    <link href="/auth/resources/axeyh/login/lima2v2/css/login.css" rel="stylesheet" />
+    <link href="/auth/resources/axeyh/login/lima2v2/css/logo.css" rel="stylesheet" />
+</head>
+
+<body class="">
+<div class="login-pf-page">
+    <div id="kc-header" class="login-pf-page-header">
+        <div id="kc-header-wrapper" class="">lima 2.0 DEV / QM</div>
+    </div>
+    <div class="card-pf">
+        <header class="login-pf-header">
+            <div class="pf-c-dropdown" id="kc-locale">
+                <div id="kc-locale-wrapper" class="">
+                    <div id="kc-locale-dropdown" class="">
+                        <a href="#" id="kc-current-locale-link">English</a>
+                        <ul class="pf-c-dropdown__menu pf-m-align-right">
+                            <li class="">
+                                <a class="pf-c-dropdown__menu-item"
+                                   href="/auth/realms/sso/login-actions/authenticate?client_id=lima-secure-net&amp;tab_id=6sZbGF9f0Zc&amp;execution=4777f292-2ba1-4c00-a31c-b1179f946a68&amp;kc_locale=de">Deutsch</a>
+                            </li>
+                            <li class="">
+                                <a class="pf-c-dropdown__menu-item"
+                                   href="/auth/realms/sso/login-actions/authenticate?client_id=lima-secure-net&amp;tab_id=6sZbGF9f0Zc&amp;execution=4777f292-2ba1-4c00-a31c-b1179f946a68&amp;kc_locale=en">English</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <h1 id="kc-page-title"> Sign in to your account
+            </h1>
+        </header>
+        <div id="kc-content">
+            <div id="kc-content-wrapper">
+
+
+                <div id="kc-form">
+                    <div id="kc-form-wrapper">
+                        <form id="kc-form-login" onsubmit="login.disabled = true; return true;"
+                              action="https://qm-lima.rhenag.de/auth/realms/sso/login-actions/authenticate?session_code=duSnyyyKuQtEbOgXxejA78svbaGzyt4epBXiocsrrSs&amp;execution=4777f292-2ba1-4c00-a31c-b1179f946a68&amp;client_id=lima-secure-net&amp;tab_id=6sZbGF9f0Zc"
+                              method="post">
+                            <div class="form-group">
+                                <label for="username"
+                                       class="pf-c-form__label pf-c-form__label-text">Username</label>
+
+                                <input tabindex="1" id="username" class="pf-c-form-control" name="username" value=""
+                                       type="text" autofocus autocomplete="off" aria-invalid="" />
+
+
+                            </div>
+
+                            <div class="form-group">
+                                <label for="password"
+                                       class="pf-c-form__label pf-c-form__label-text">Password</label>
+
+                                <input tabindex="2" id="password" class="pf-c-form-control" name="password"
+                                       type="password" autocomplete="off" aria-invalid="" />
+
+
+                            </div>
+
+                            <div class="form-group login-pf-settings">
+                                <div id="kc-form-options">
+                                </div>
+                                <div class="">
+                                        <span><a tabindex="5"
+                                                 href="https://qm-lima.rhenag.de/rhenag-web/#/password-recovery">Forgot
+                                                Password?</a></span>
+                                </div>
+
+                            </div>
+
+                            <div id="kc-form-buttons" class="form-group">
+                                <input type="hidden" id="id-hidden-input" name="credentialId" />
+                                <input tabindex="4" class="pf-c-button pf-m-primary pf-m-block btn-lg" name="login"
+                                       id="kc-login" type="submit" value="Sign In" />
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+
+</html>

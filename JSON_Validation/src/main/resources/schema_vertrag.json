@@ -1,12 +1,15 @@
 {
   "$schema": "https://json-schema.org/draft-07/schema",
-  "description": "Vertrag Schmea Validation",
+  "description": "Vertrag Schema Validation",
   "title": "Vertrag API",
   "type": "object",
   "properties": {
     "vertrag": {
       "type": "object",
       "properties": {
+        "vertragsId": {
+          "type": "string"
+        },
         "vertragsart": {
           "type": "string",
           "enum": [
@@ -57,21 +60,70 @@
             "WIDERRUFEN"
           ]
         },
+        "tarifKennzeichen": {
+          "type": "string",
+          "enum": [
+            "HT",
+            "NT",
+            ""
+          ],
+          "default": ""
+        },
+        "vertriebspartner": {
+          "type": "string"
+        },
         "vertragspartner": {
           "type": "object",
           "properties": {
-            "kunden": {
-              "type": "object",
-              "$ref": "#/definitions/kunden"
+            "kundennummer": {
+              "type": "string"
             },
-            "zahlung": {
+            "debitornummer": {
+              "type": "string"
+            },
+            "abschlag": {
               "type": "object",
-              "$ref": "#/definitions/zahlung"
+              "properties": {
+                "betrag": {
+                  "type": "number",
+                  "minimum": 0.0
+                },
+                "mwStSatz": {
+                  "type": "number",
+                  "minimum": 0.0,
+                  "maximum": 100.0,
+                  "default": 19.0
+                },
+                "waehrung": {
+                  "type": "string",
+                  "minLength": 3,
+                  "default": "EUR"
+                },
+                "frist": {
+                  "type": "string",
+                  "enum": [
+                    "MONAT",
+                    "TAG",
+                    "JAHR",
+                    "QUARTAL"
+                  ],
+                  "default": "MONAT"
+                },
+                "faelligkeitsdatum": {
+                  "type": "string",
+                  "format": "date"
+                }
+              },
+              "required": [
+                "betrag",
+                "faelligkeitsdatum"
+              ]
             }
           },
           "required": [
-            "kunden",
-            "zahlung"
+            "kundennummer",
+            "debitornummer",
+            "abschlag"
           ]
         },
         "vertragskonditionen": {
@@ -79,20 +131,27 @@
           "properties": {
             "kuendigungsfrist": {
               "type": "object",
-              "$ref": "#/definitions/zeitraum"
+              "$ref": "#/definitions/zeitraum",
+              "required": [
+                "einheit"
+              ]
             },
             "vertragslaufzeit": {
               "type": "object",
               "$ref": "#/definitions/zeitraum",
               "required": [
-                "dauer",
                 "einheit",
                 "startdatum"
               ]
             },
             "vertragsverlaengerung": {
               "type": "object",
-              "$ref": "#/definitions/zeitraum"
+              "$ref": "#/definitions/zeitraum",
+              "properties": {
+                "einheit": {
+                  "default": "MONAT"
+                }
+              }
             }
           },
           "required": [
@@ -108,61 +167,102 @@
               "type": "string",
               "format": "date"
             },
-            "vertriebspartner": {
+            "objektNummer": {
               "type": "string"
-            },
-            "netzbetreiber": {
-              "description": "Netzbetreibernummer",
-              "type": "string"
-            },
-            "messstellenbetreiber": {
-              "type": "string"
-            },
-            "lastprofil": {
-              "type": "string"
-            },
-            "netzebene": {
-              "type": "string",
-              "enum": [
-                "Höchstspannungsnetz",
-                "Umspannung",
-                "Hochspannungsnetz",
-                "Umspannung zwischen Hoch- und Mittelspannung",
-                "Mittelspannungsnetz",
-                "Umspannung zwischen Mittel- und Niederspannung",
-                "Niederspannungsnetz"
-              ]
             },
             "netznutzungProduktId": {
               "type": "string"
             },
-            "objektId": {
-              "type": "string"
-            },
-            "adresse": {
+            "marktlokation": {
               "type": "object",
-              "$ref": "#/definitions/adresse"
+              "properties": {
+                "marktlokationIdent": {
+                  "type": "string"
+                },
+                "netzparameter": {
+                  "type": "object",
+                  "properties": {
+                    "marktgebiet": {
+                      "type": "string"
+                    },
+                    "bilanzKreisKey": {
+                      "type": "string"
+                    },
+                    "netzebene": {
+                      "type": "string",
+                      "enum": [
+                        "Höchstspannungsnetz",
+                        "Umspannung",
+                        "Hochspannungsnetz",
+                        "Umspannung zwischen Hoch- und Mittelspannung",
+                        "Mittelspannungsnetz",
+                        "Umspannung zwischen Mittel- und Niederspannung",
+                        "Niederspannungsnetz"
+                      ]
+                    },
+                    "konzessionsabgabe": {
+                      "type": "string"
+                    },
+                    "verteilnetz": {
+                      "type": "object",
+                      "properties": {
+                        "netzbetreibercodenr": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "netzbetreibercodenr"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "bilanzKreisKey",
+                    "verteilnetz"
+                  ]
+                }
+              },
+              "required": [
+                "netzparameter"
+              ]
             },
-            "zaehler": {
+            "messlokation": {
               "type": "object",
-              "$ref": "#/definitions/zaehler"
-            },
-            "verbrauchsstellenHinweise": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "$ref": "#/definitions/zusatzAttribute"
-              }
+              "properties": {
+                "messlokationsIdent": {
+                  "type": "string"
+                },
+                "lastprofil": {
+                  "type": "string"
+                },
+                "messebene": {
+                  "type": "string"
+                },
+                "zaehler": {
+                  "type": "object",
+                  "properties": {
+                    "geraetenummer": {
+                      "type": "string"
+                    },
+                    "messstellenbetreiber": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "messstellenbetreiber"
+                  ]
+                }
+              },
+              "required": [
+                "lastprofil"
+              ]
             }
           },
           "required": [
-            "lastprofil",
             "lieferbeginn",
-            "vertriebspartner",
-            "netzbetreiber",
+            "objektNummer",
             "netznutzungProduktId",
-            "objektId",
-            "zaehler"
+            "marktlokation",
+            "messlokation"
           ]
         },
         "prognostizierterVerbrauch": {
@@ -194,52 +294,116 @@
         "tarif": {
           "type": "object",
           "properties": {
-            "tarifKennzeichen": {
-              "type": "string",
-              "enum": [
-                "HT",
-                "NT"
-              ]
-            },
-            "preisstand": {
-              "type": "string",
-              "format": "date"
-            },
             "produktId": {
               "type": "string"
-            },
-            "tarifpreise": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "$ref": "#/definitions/tarifpreis"
-              }
-            },
-            "berechnungsparameter": {
-              "type": "object",
-              "$ref": "#/definitions/berechnungsparameter"
-            },
-            "preisgarantie": {
-              "type": "object",
-              "$ref": "#/definitions/preisGarantie"
-            },
-            "tarifAufAbschlaege": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "$ref": "#/definitions/tarifAufAbschlaege"
-              }
             }
           },
           "required": [
             "produktId"
           ]
         },
-        "bonus": {
+        "vertragSonstigeAttribute": {
           "type": "array",
+          "minItems": 3,
+          "allOf": [
+            {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "attribute": {
+                    "type": "string",
+                    "const": "abrechnungsgruppen"
+                  }
+                },
+                "required": [
+                  "attribute"
+                ]
+              }
+            },
+            {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "attribute": {
+                    "type": "string",
+                    "const": "kundenGruppenSchluessel"
+                  }
+                },
+                "required": [
+                  "attribute"
+                ]
+              }
+            },
+            {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "attribute": {
+                    "type": "string",
+                    "const": "prognoseGrundlage"
+                  }
+                },
+                "required": [
+                  "attribute"
+                ]
+              }
+            }
+          ],
+          "uniqueItems": true,
           "items": {
-            "type": "object",
-            "$ref": "#/definitions/bonus"
+            "$ref": "#/definitions/zusatzAttribute",
+            "if": {
+              "properties": {
+                "attribute": {
+                  "const": "abrechnungsgruppen"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "wert": {
+                  "type": "string",
+                  "enum": [
+                    "Ablesung 30.01., Abrechnung 14.02.",
+                    "Ablesung 28.02., Abrechnung 15.03.",
+                    "Ablesung 30.03., Abrechnung 15.04.",
+                    "Ablesung 30.04., Abrechnung 15.05.",
+                    "Ablesung 30.05., Abrechnung 15.06.",
+                    "Ablesung 30.06., Abrechnung 15.07.",
+                    "Ablesung 30.07., Abrechnung 15.08.",
+                    "Ablesung 30.08., Abrechnung 15.09.",
+                    "Ablesung 30.09., Abrechnung 15.10.",
+                    "Ablesung 30.10., Abrechnung 15.11.",
+                    "Ablesung 30.11., Abrechnung 15.12.",
+                    "Ablesung 31.12., Abrechnung 15.01."
+                  ]
+                }
+              }
+            },
+            "else": {
+              "if": {
+                "properties": {
+                  "attribute": {
+                    "const": "prognoseGrundlage"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "wert": {
+                    "type": "string",
+                    "enum": [
+                      "Werte",
+                      "Standardlastprofile",
+                      "Standardeinspeiseprofile",
+                      "tagesparameterabhängige Lastprofile",
+                      "tagesparameterabhängige Einspeiseprofile",
+                      "tagesparameterabhängige Einspeiseprofile mit Referenzmessung"
+                    ]
+                  }
+                }
+              }
+            }
           }
         }
       },
@@ -249,74 +413,9 @@
         "vertragskonditionen",
         "verbrauchsstelle",
         "prognostizierterVerbrauch",
-        "tarif"
+        "tarif",
+        "vertragSonstigeAttribute"
       ]
-    },
-    "vertragSonstigeAttribute": {
-      "type": "array",
-      "minItems": 2,
-      "allOf": [
-        {
-          "contains": {
-            "type": "object",
-            "properties": {
-              "attribute": {
-                "type": "string",
-                "const": "abrechnungsgruppenId"
-              }
-            },
-            "required": [
-              "attribute"
-            ]
-          }
-        },
-        {
-          "contains": {
-            "type": "object",
-            "properties": {
-              "attribute": {
-                "type": "string",
-                "const": "kundenGruppenSchluessel"
-              }
-            },
-            "required": [
-              "attribute"
-            ]
-          }
-        }
-      ],
-      "uniqueItems": true,
-      "items": {
-        "$ref": "#/definitions/zusatzAttribute",
-        "if": {
-          "properties": {
-            "attribute": {
-              "const": "abrechnungsgruppenId"
-            }
-          }
-        },
-        "then": {
-          "properties": {
-            "wert": {
-              "type": "string",
-              "enum": [
-                "Ablesung 30.01., Abrechnung 14.02.",
-                "Ablesung 28.02., Abrechnung 15.03.",
-                "Ablesung 30.03., Abrechnung 15.04.",
-                "Ablesung 30.04., Abrechnung 15.05.",
-                "Ablesung 30.05., Abrechnung 15.06.",
-                "Ablesung 30.06., Abrechnung 15.07.",
-                "Ablesung 30.07., Abrechnung 15.08.",
-                "Ablesung 30.08., Abrechnung 15.09.",
-                "Ablesung 30.09., Abrechnung 15.10.",
-                "Ablesung 30.10., Abrechnung 15.11.",
-                "Ablesung 30.11., Abrechnung 15.12.",
-                "Ablesung 31.12., Abrechnung 15.01."
-              ]
-            }
-          }
-        }
-      }
     }
   },
   "definitions": {
@@ -333,316 +432,6 @@
           ]
         }
       }
-    },
-    "adresse": {
-      "type": "object",
-      "properties": {
-        "adresseTyp": {
-          "type": "string",
-          "enum": [
-            "Lieferadresse",
-            "Rechnungsadresse"
-          ],
-          "default": "Lieferadresse"
-        },
-        "strasse": {
-          "type": "string"
-        },
-        "adresszusatz": {
-          "type": "string"
-        },
-        "hausnummer": {
-          "type": "number"
-        },
-        "hausnummerzusatz": {
-          "type": "string"
-        },
-        "wohnungsnummer": {
-          "type": "number"
-        },
-        "postleitzahl": {
-          "type": "string"
-        },
-        "postfach": {
-          "type": "string"
-        },
-        "ortsteil": {
-          "type": "string"
-        },
-        "bezirk": {
-          "type": "string"
-        },
-        "ort": {
-          "type": "string"
-        },
-        "land": {
-          "type": "string"
-        }
-      },
-      "required": [
-        "adresseTyp",
-        "strasse",
-        "hausnummer",
-        "postleitzahl",
-        "ort",
-        "land"
-      ]
-    },
-    "preis": {
-      "type": "object",
-      "properties": {
-        "arbeitspreis": {
-          "type": "number"
-        },
-        "einheitArbeitspreis": {
-          "type": "string",
-          "enum": [
-            "CT/KWH",
-            "EUR/KWH"
-          ],
-          "default": "CT/KWH"
-        },
-        "grundpreis": {
-          "type": "number"
-        },
-        "einheitGrundpreis": {
-          "type": "string",
-          "enum": [
-            "EUR/JAHR",
-            "CT/MONAT"
-          ],
-          "default": "EUR/JAHR"
-        }
-      },
-      "required": [
-        "arbeitspreis",
-        "grundpreis"
-      ]
-    },
-    "bonus": {
-      "type": "object",
-      "properties": {
-        "typ": {
-          "type": "string",
-          "enum": [
-            "Sofortbonus",
-            "Neukundenbonus",
-            "Treuebonus"
-          ]
-        },
-        "betrag": {
-          "type": "number"
-        },
-        "einheit": {
-          "type": "string",
-          "enum": [
-            "EUR",
-            "EUR/MONAT"
-          ]
-        },
-        "von": {
-          "type": "string",
-          "format": "date"
-        },
-        "bis": {
-          "type": "string",
-          "format": "date"
-        },
-        "auszahlungsdatum": {
-          "type": "string",
-          "format": "date"
-        },
-        "preis": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/preis"
-          }
-        }
-      },
-      "required": [
-        "typ",
-        "betrag",
-        "einheit",
-        "von"
-      ]
-    },
-    "tarifpreis": {
-      "type": "object",
-      "properties": {
-        "beschreibung": {
-          "type": "string"
-        },
-        "preis": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/preis"
-          }
-        }
-      },
-      "required": [
-        "preis"
-      ]
-    },
-    "berechnungsparameter": {
-      "type": "object",
-      "properties": {
-        "berechnungsmethode": {
-          "type": "string",
-          "enum": [
-            "BESTABRECHNUNG_STAFFEL",
-            "KEINE",
-            "PAKETPREIS",
-            "STAFFELN",
-            "ZONEN"
-          ]
-        },
-        "kwInklusive": {
-          "type": "number",
-          "description": "die im Tarif beinhaltete Menge von KW"
-        },
-        "kwWeitereMenge": {
-          "description": "weitere Kosten für zusatzliches KW außerhalb des Tarifs",
-          "type": "number"
-        },
-        "kwWeitereMengeEinheit": {
-          "type": "string",
-          "enum": [
-            "CT",
-            "EUR"
-          ]
-        },
-        "mindestpreis": {
-          "type": "object",
-          "properties": {
-            "bezugswert": {
-              "type": "string",
-              "enum": [
-                "KUBIKMETER",
-                "KWH",
-                "KW"
-              ]
-            },
-            "einheit": {
-              "type": "string",
-              "enum": [
-                "CT",
-                "EUR"
-              ]
-            },
-            "status": {
-              "type": "string",
-              "enum": [
-                "ENDGUELTIG",
-                "VORLAEUFIG"
-              ]
-            },
-            "wert": {
-              "type": "number"
-            }
-          },
-          "required": [
-            "bezugswert",
-            "einheit",
-            "status",
-            "wert"
-          ]
-        },
-        "hoechstpreis": {
-          "type": "object",
-          "properties": {
-            "bezugswert": {
-              "type": "string",
-              "enum": [
-                "KUBIKMETER",
-                "KWH",
-                "KW"
-              ]
-            },
-            "einheit": {
-              "type": "string",
-              "enum": [
-                "CT",
-                "EUR"
-              ]
-            },
-            "status": {
-              "type": "string",
-              "enum": [
-                "ENDGUELTIG",
-                "VORLAEUFIG"
-              ]
-            },
-            "wert": {
-              "type": "number"
-            }
-          },
-          "required": [
-            "bezugswert",
-            "einheit",
-            "status",
-            "wert"
-          ]
-        },
-        "istMesspreisInGrundpreisEnthalten": {
-          "type": "boolean",
-          "default": true
-        },
-        "istMesspreisZuBeruecksichtigen": {
-          "type": "boolean",
-          "default": true
-        },
-        "messpreistyp": {
-          "type": "string"
-        },
-        "zusatzpreise": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "kennzeichen": {
-                "type": "string"
-              },
-              "preistyp": {
-                "type": "string"
-              },
-              "wert": {
-                "type": "number"
-              },
-              "einheit": {
-                "type": "string",
-                "enum": [
-                  "CT",
-                  "EUR"
-                ]
-              }
-            },
-            "if": {
-              "anyOf": [
-                {
-                  "properties": {
-                    "preistyp": {
-                      "const": "OEKOSTEUER"
-                    }
-                  }
-                },
-                {
-                  "properties": {
-                    "preistyp": {
-                      "const": "KONZESSIONSABGABE"
-                    }
-                  }
-                }
-              ]
-            },
-            "then": {
-              "required": [
-                "kennzeichen"
-              ]
-            }
-          }
-        }
-      },
-      "required": []
     },
     "zeitraum": {
       "type": "object",
@@ -668,705 +457,12 @@
         }
       },
       "required": [
-        "dauer",
-        "einheit"
-      ]
-    },
-    "preisGarantie": {
-      "type": "object",
-      "properties": {
-        "beschreibung": {
-          "type": "string"
-        },
-        "preisgarantietyp": {
-          "type": "string",
-          "enum": [
-            "ALLE_PREISBESTANDTEILE_BRUTTO",
-            "ALLE_PREISBESTANDTEILE_NETTO",
-            "NUR_ENERGIEPREIS",
-            "PREISBESTANDTEILE_OHNE_ABGABEN"
-          ],
-          "default": "ALLE_PREISBESTANDTEILE_BRUTTO"
-        },
-        "zeitlichGueltigkeit": {
-          "type": "object",
-          "$ref": "#/definitions/zeitraum"
-        }
-      },
-      "required": [
-        "preisgarantietyp",
-        "zeitlichGueltigkeit"
-      ]
-    },
-    "tarifAufAbschlaege": {
-      "type": "object",
-      "properties": {
-        "aufAbschlagstyp": {
-          "type": "string",
-          "enum": [
-            "ABSOLUT",
-            "RELATIV"
-          ]
-        },
-        "aufAbschlagsziel": {
-          "type": "string",
-          "enum": [
-            "ARBEITSPREIS_EINTARIF",
-            "ARBEITSPREIS_HT",
-            "ARBEITSPREIS_HT_NT",
-            "ARBEITSPREIS_NT",
-            "GESAMTPREIS",
-            "GRUNDPREIS"
-          ]
-        },
-        "bezeichnung": {
-          "type": "string"
-        },
-        "beschreibung": {
-          "type": "string"
-        },
-        "einheit": {
-          "type": "string",
-          "enum": [
-            "CT",
-            "EUR"
-          ]
-        },
-        "betraege": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "staffelgrenzeBis": {
-                "type": "number"
-              },
-              "staffelgrenzeVon": {
-                "type": "number"
-              },
-              "wert": {
-                "type": "number"
-              }
-            },
-            "required": [
-              "staffelgrenzeBis",
-              "staffelgrenzeVon",
-              "wert"
-            ]
-          }
-        },
-        "zeitlichGueltigkeit": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/zeitraum"
-          }
-        }
-      },
-      "required": [
-        "aufAbschlagstyp",
-        "aufAbschlagsziel",
-        "einheit"
-      ]
-    },
-    "zaehler": {
-      "type": "object",
-      "properties": {
-        "zaehlernummer": {
-          "type": "string"
-        },
-        "zaehlerstand": {
-          "type": "number"
-        },
-        "ablesekennzeichen": {
-          "type": "string",
-          "enum": [
-            "Ablesung durch Kunden",
-            "telefonisch angegeben",
-            "Anfangszählerstand Neukunden",
-            "manuelle Schätzung",
-            "Schätzung durch Vertrieb"
-          ]
-        },
-        "zaehlertyp": {
-          "type": "string"
-        },
-        "zaehlergroesse": {
-          "type": "string"
-        },
-        "zaehlerauspraegung": {
-          "type": "string",
-          "enum": [
-            "EINRICHTUNGSZAEHLER",
-            "ZWEIRICHTUNGSZAEHLER"
-          ]
-        },
-        "zaehlertypSpezifikation": {
-          "type": "string"
-        },
-        "befestigungsart": {
-          "type": "string"
-        },
-        "eichungBis": {
-          "type": "string",
-          "format": "date"
-        },
-        "letzteEichung": {
-          "type": "string",
-          "format": "date"
-        },
-        "istFernschaltbar": {
-          "type": "boolean",
-          "default": false
-        },
-        "registeranzahl": {
-          "type": "string",
-          "enum": [
-            "EINTARIF",
-            "MEHRTARIF",
-            "ZWEITARIF"
-          ]
-        },
-        "geraete": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "bezeichnung": {
-                "type": "string"
-              },
-              "geraeteklasse": {
-                "type": "string",
-                "enum": [
-                  "KOMMUNIKATIONSEINRICHTUNG",
-                  "MENGENUMWERTER",
-                  "STEUERBOX",
-                  "TECHNISCHE_STEUEREINRICHTUNG",
-                  "WANDLER",
-                  "ZAEHLEINRICHTUNG"
-                ]
-              },
-              "geraetenummer": {
-                "type": "string"
-              },
-              "geraetetyp": {
-                "type": "string"
-              }
-            }
-          }
-        },
-        "zaehlerpunkt": {
-          "type": "object",
-          "properties": {
-            "marketlocation": {
-              "type": "object",
-              "properties": {
-                "maloId": {
-                  "type": "string"
-                },
-                "bilanzKreisKey": {
-                  "type": "string"
-                },
-                "messlokation": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "meloId": {
-                        "type": "string"
-                      }
-                    }
-                  }
-                }
-              },
-              "required": [
-                "bilanzKreisKey"
-              ]
-            }
-          },
-          "required": [
-            "marketlocation"
-          ]
-        }
-      },
-      "dependencies": {
-        "zaehlerstand": [
-          "ablesekennzeichen"
-        ]
-      },
-      "required": [
-        "zaehlerpunkt"
-      ]
-    },
-    "stammdatenP": {
-      "type": "array",
-      "minItems": 1,
-      "maxItems": 2,
-      "uniqueItems": true,
-      "items": {
-        "type": "object",
-        "properties": {
-          "anrede": {
-            "type": "string"
-          },
-          "titel": {
-            "type": "string"
-          },
-          "vorname": {
-            "type": "string"
-          },
-          "vorname2": {
-            "type": "string",
-            "description": "Middle Name"
-          },
-          "nachname": {
-            "type": "string"
-          },
-          "geburtsname": {
-            "type": "string"
-          },
-          "geburtsdatum": {
-            "type": "string",
-            "format": "date"
-          },
-          "geburtsort": {
-            "type": "string"
-          },
-          "kontakt": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "typ": {
-                  "type": "string",
-                  "enum": [
-                    "Telefonnummer",
-                    "Email",
-                    "Fax",
-                    "Festnetz"
-                  ]
-                },
-                "kontaktdetails": {
-                  "type": "string"
-                },
-                "zusatzinfo": {
-                  "type": "string"
-                }
-              },
-              "if": {
-                "properties": {
-                  "typ": {
-                    "const": "Email"
-                  }
-                },
-                "then": {
-                  "properties": {
-                    "kontaktdetails": {
-                      "type": "string",
-                      "format": "email"
-                    }
-                  }
-                },
-                "else": {
-                  "properties": {
-                    "kontaktdetails": {
-                      "type": "string",
-                      "pattern": "^\\+\\d{1,3}$"
-                    }
-                  }
-                }
-              },
-              "required": [
-                "typ",
-                "kontaktdetails"
-              ]
-            }
-          },
-          "adresse": {
-            "type": "array",
-            "minItems": 1,
-            "items": {
-              "$ref": "#/definitions/adresse"
-            }
-          }
-        },
-        "required": [
-          "anrede",
-          "vorname",
-          "nachname",
-          "geburtsdatum",
-          "geburtsort",
-          "adresse"
-        ]
-      }
-    },
-    "stammdatenG": {
-      "type": "array",
-      "minItems": 1,
-      "maxItems": 2,
-      "uniqueItems": true,
-      "items": {
-        "type": "object",
-        "properties": {
-          "anrede": {
-            "type": "string"
-          },
-          "titel": {
-            "type": "string"
-          },
-          "firmaName": {
-            "type": "string"
-          },
-          "zusatzinfo": {
-            "type": "string"
-          },
-          "gruendungsdatum": {
-            "type": "string",
-            "format": "date"
-          },
-          "steuernummer": {
-            "type": "string",
-            "pattern": "^\\d{3}/\\d{3}/\\d{4}$"
-          },
-          "kontakt": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "typ": {
-                  "type": "string",
-                  "enum": [
-                    "Telefonnummer",
-                    "Email",
-                    "Fax",
-                    "Festnetz"
-                  ]
-                },
-                "kontaktdetails": {
-                  "type": "string"
-                },
-                "zusatzinfo": {
-                  "type": "string"
-                }
-              },
-              "if": {
-                "properties": {
-                  "typ": {
-                    "const": "Email"
-                  }
-                },
-                "then": {
-                  "properties": {
-                    "kontaktdetails": {
-                      "type": "string",
-                      "format": "email"
-                    }
-                  }
-                },
-                "else": {
-                  "properties": {
-                    "kontaktdetails": {
-                      "type": "string",
-                      "pattern": "^\\+\\d{1,3}$"
-                    }
-                  }
-                }
-              },
-              "required": [
-                "typ",
-                "kontaktdetails"
-              ]
-            }
-          },
-          "adresse": {
-            "type": "array",
-            "minItems": 1,
-            "items": {
-              "$ref": "#/definitions/adresse"
-            }
-          }
-        },
-        "required": [
-          "anrede",
-          "firmaName",
-          "steuernummer",
-          "adresse"
-        ]
-      }
-    },
-    "kunden": {
-      "type": "object",
-      "properties": {
-        "kundennummer": {
-          "type": "string"
-        },
-        "typ": {
-          "type": "string",
-          "enum": [
-            "P",
-            "G"
-          ],
-          "description": "P für Private, G für Geschäft"
-        },
-        "kundenSonstigeAttribute": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/zusatzAttribute"
-          }
-        }
-      },
-      "if": {
-        "properties": {
-          "typ": {
-            "const": "G"
-          }
-        }
-      },
-      "then": {
-        "dependencies": {
-          "typ": {
-            "properties": {
-              "stammdaten": {
-                "$ref": "#/definitions/stammdatenG"
-              }
-            },
-            "required": [
-              "stammdaten"
-            ]
-          }
-        }
-      },
-      "else": {
-        "dependencies": {
-          "typ": {
-            "properties": {
-              "stammdaten": {
-                "$ref": "#/definitions/stammdatenP"
-              }
-            },
-            "required": [
-              "stammdaten"
-            ]
-          }
-        }
-      },
-      "required": [
-        "kundennummer"
-      ]
-    },
-    "zahlung": {
-      "type": "object",
-      "properties": {
-        "debitornummer": {
-          "type": "string"
-        },
-        "zahlungsmethode": {
-          "type": "array",
-          "minItems": 1,
-          "maxItems": 2,
-          "uniqueItems": true,
-          "items": {
-            "type": "object",
-            "properties": {
-              "zahlungsempfaenger": {
-                "type": "string",
-                "enum": [
-                  "Kunde",
-                  "Geschaeft"
-                ]
-              },
-              "verwendungszweck": {
-                "type": "string"
-              },
-              "zahlungsweise": {
-                "type": "string",
-                "enum": [
-                  "Bankeinzug",
-                  "PayPal",
-                  "Bar",
-                  "Krytowaehrung"
-                ]
-              }
-            },
-            "if": {
-              "properties": {
-                "zahlungsweise": {
-                  "const": "Bankeinzug"
-                }
-              }
-            },
-            "then": {
-              "properties": {
-                "zahlungsdetails": {
-                  "type": "array",
-                  "minItems": 2,
-                  "uniqueItems": true,
-                  "allOf": [
-                    {
-                      "contains": {
-                        "properties": {
-                          "attribute": {
-                            "const": "KontoInhaber"
-                          }
-                        }
-                      }
-                    },
-                    {
-                      "contains": {
-                        "properties": {
-                          "attribute": {
-                            "const": "IBAN"
-                          },
-                          "wert": {
-                            "pattern": "^([A-Z]{2}[ \\-]?[0-9]{2})(?=(?:[ \\-]?[A-Z0-9]){9,30}$)((?:[ \\-]?[A-Z0-9]{3,5}){2,7})([ \\-]?[A-Z0-9]{1,3})?$"
-                          }
-                        }
-                      }
-                    }
-                  ],
-                  "items": {
-                    "type": "object",
-                    "$ref": "#/definitions/zusatzAttribute",
-                    "required": [
-                      "attribute",
-                      "wert"
-                    ]
-                  }
-                }
-              },
-              "required": [
-                "zahlungsdetails"
-              ]
-            },
-            "else": {
-              "if": {
-                "properties": {
-                  "zahlungsweise": {
-                    "const": "PayPal"
-                  }
-                }
-              },
-              "then": {
-                "properties": {
-                  "zahlungsdetails": {
-                    "type": "array",
-                    "minItems": 1,
-                    "contains": {
-                      "properties": {
-                        "attribute": {
-                          "const": "Email"
-                        },
-                        "wert": {
-                          "format": "email"
-                        }
-                      }
-                    },
-                    "items": {
-                      "type": "object",
-                      "$ref": "#/definitions/zusatzAttribute"
-                    }
-                  }
-                },
-                "required": [
-                  "zahlungsdetails"
-                ]
-              },
-              "else": {
-                "if": {
-                  "properties": {
-                    "zahlungsweise": {
-                      "const": "Krytowaehrung"
-                    }
-                  }
-                },
-                "then": {
-                  "properties": {
-                    "zahlungsdetails": {
-                      "type": "array",
-                      "minItems": 1,
-                      "contains": {
-                        "oneOf": [
-                          {
-                            "properties": {
-                              "attribute": {
-                                "const": "BitCoin"
-                              }
-                            }
-                          }
-                        ]
-                      },
-                      "items": {
-                        "type": "object",
-                        "$ref": "#/definitions/zusatzAttribute"
-                      }
-                    }
-                  },
-                  "required": [
-                    "zahlungsdetails"
-                  ]
-                }
-              }
-            },
-            "required": [
-              "zahlungsempfaenger",
-              "zahlungsweise"
-            ]
-          }
-        },
-        "abschlag": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "betrag": {
-                "type": "number"
-              },
-              "mwStSatz": {
-                "type": "number",
-                "description": "Einheit Prozent",
-                "default": 19.0
-              },
-              "waehrung": {
-                "type": "string",
-                "default": "EUR"
-              },
-              "frist": {
-                "type": "string",
-                "enum": [
-                  "MONAT",
-                  "TAG",
-                  "JAHR"
-                ],
-                "default": "MONAT"
-              },
-              "faelligkeitsdatum": {
-                "type": "string",
-                "format": "date"
-              },
-              "status": {
-                "type": "string",
-                "enum": [
-                  "BEZAHLT",
-                  "AUSSTEHENDE"
-                ]
-              }
-            }
-          }
-        },
-        "zahlungsSonstigeAttribute": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/zusatzAttribute"
-          }
-        }
-      },
-      "required": [
-        "debitornummer"
+        "dauer"
       ]
     }
   },
   "additionalProperties": false,
   "required": [
-    "vertrag",
-    "vertragSonstigeAttribute"
+    "vertrag"
   ]
 }

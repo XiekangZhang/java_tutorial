@@ -1,82 +1,68 @@
 {
   "vertrag": {
     "sparte": "STROM",
+    "vertriebspartner": "evm",
     "vertragspartner": {
-      "kunden": {
-        "kundennummer": "xxxxxxxxx"
-      },
-      "zahlung": {
-        "debitornummer": "",
-        "abschlag": [
-          {
-            "betrag": 100.0,
-            "waehrung": "EUR",
-            "frist": "MONAT",
-            "faelligkeitsdatum": "2024-04-01"
-          }
-        ]
+      "kundennummer": "123465789",
+      "debitornummer": "1",
+      "abschlag": {
+        "betrag": 100.0,
+        "faelligkeitsdatum": "2021-11-01"
       }
     },
     "vertragskonditionen": {
       "kuendigungsfrist": {
-        "dauer": 12,
+        "dauer": 1,
         "einheit": "MONAT"
       },
       "vertragslaufzeit": {
         "dauer": 12,
-        "einheit": "MONAT",
-        "startdatum": "2024-06-01"
+        "einheit": "TAG",
+        "startdatum": "2024-01-01",
+        "enddatum": "2025-01-01"
       },
       "vertragsverlaengerung": {
-        "dauer": 12,
-        "einheit": "MONAT"
+        "dauer": 1
       }
     },
     "verbrauchsstelle": {
-      "lieferbeginn": "2024-06-01",
-      "vertriebspartner": "",
-      "netzbetreiber": "",
-      "lastprofil": "H0",
-      "netznutzungProduktId": "",
-      "objektId": "123456798",
-      "zaehler": {
-        "zaehlernummer": "xxx",
-        "zaehlerstand": 12345,
-        "ablesekennzeichen": "",
-        "zaehlerpunkt": {
-          "marketlocation": {
-            "maloID": "17735154284",
-            "bilanzkreisKey": ""
+      "lieferbeginn": "2024-07-01",
+      "objektNummer": "1234657890",
+      "netznutzungProduktId": "123",
+      "marktlokation": {
+        "netzparameter": {
+          "bilanzKreisKey": "xxxxxx",
+          "verteilnetz": {
+            "netzbetreibercodenr": "123"
           }
         }
+      },
+      "messlokation": {
+        "lastprofil": "H0"
       }
     },
     "prognostizierterVerbrauch": [
       {
         "attribute": "KWH/JAHR",
-        "wert": 1500
+        "wert": 1500.0
       }
     ],
     "tarif": {
-      "produktId": "",
-      "berechnungsparameter": {
-        "zusatzpreise": [
-          {
-            "kennzeichen": "",
-            "preistyp": ""
-          }
-        ]
-      }
-    }
-  },
-  "vertragSonstigeAttribute": [
-    {
-      "attribute": "kundenGruppenSchluessel",
-      "wert": "675"
+      "produktId": "123456789"
     },
-    {
-      "attribute": "abrechnungsgruppenId",
-      "wert": "Ablesung 30.01., Abrechnung 14.02."
-    }
-  ]
+    "vertragSonstigeAttribute": [
+      {
+        "attribute": "abrechnungsgruppen",
+        "wert": "Ablesung 30.01., Abrechnung 14.02."
+      },
+      {
+        "attribute": "kundenGruppenSchluessel",
+        "wert": "123"
+      },
+      {
+        "attribute": "prognoseGrundlage",
+        "wert": "Standardlastprofile"
+      }
+    ]
+  }
 }
