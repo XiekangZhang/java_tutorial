@@ -25,6 +25,7 @@
             <name>dom4j</name>
             <url>https://maven.firstdarkdev.xyz/releases/</url>
         </repository>
+
     </repositories>
 
     <dependencies>
@@ -94,6 +95,13 @@
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
             <version>1.15.3</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.17.1</version>
         </dependency>
 
     </dependencies>

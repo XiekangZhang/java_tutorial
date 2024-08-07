@@ -18,6 +18,7 @@ public class Main {
         System.out.println(encoded);
         System.out.println(new String(DataMasking.BASE64_DECODER.apply(encoded.getBytes(StandardCharsets.UTF_8))));
         System.out.println(new String(DataMasking.BASE64_DECODER.apply("TElNQV8xMVBPU1RFSU5HLTMzMjE3NzA".getBytes(StandardCharsets.UTF_8))));
+        System.out.println(("123".length()));
 
         /**
         String mainKey = DataMasking.createRandomString(16);

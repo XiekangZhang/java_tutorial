@@ -1,9 +1,7 @@
 package de.xiekang.talend;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -11,11 +9,20 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.ValueNode;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
 public class JSONUtils {
+    public static Logger LOGGER = LogManager.getLogger(JSONUtils.class.getName());
 
+    /**
+     * Convert sub-JSON to string marked with double quotes
+     * @param JSON input JSON like string
+     * @param JSONPath if only sub-JSON will be converted to string with double quotes
+     * @return sub-JSON with double quotes
+     */
     public static String convertJSONToString(String JSON, String JSONPath) {
         DocumentContext documentContext = JsonPath.parse(JSON);
         LinkedHashMap<String, Object> value = documentContext.read(JSONPath);
@@ -23,21 +30,59 @@ public class JSONUtils {
         try {
             newValue = new ObjectMapper().writeValueAsString(value);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage());
         }
         return documentContext.set(JSONPath, newValue).jsonString();
     }
 
+    /**
+     * Convert JSON with double quotes back to JSON (attribute: value) alike structure
+     * @param JSONString JSON with double quotes
+     * @return (attribute: value) alike structure
+     */
     public static String convertStringToJSON(String JSONString) {
         try {
             JsonNode jsonNode = new ObjectMapper().readTree(JSONString);
             JSONString = jsonNode.asText();
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
         return JSONString;
     }
 
+    /**
+     * Convert Map back to JSON (attribute: value) like structure
+     * @param JSONMap Map of JSON
+     * @return JSONString
+     */
+    public static String convertMapToJSON(Map<String, Object> JSONMap) {
+        String result = "";
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            result = objectMapper.writeValueAsString(JSONMap);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+        }
+        return result;
+    }
+
+    /**
+     * Convert JSONString to Java Map Object
+     * @param JSONString a string formed for JSON
+     * @return Map Object
+     */
+    public static Map<String, Object> convertJSONStringToMap(String JSONString) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Object> map = new LinkedHashMap<>();
+        try {
+            map = objectMapper.readValue(JSONString, new TypeReference<Map<String, Object>>() {});
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+        }
+        return map;
+    }
+
+    @Deprecated(since = "0.2")
     public static String convertListOfMaptoJSON(List<Map<String, Object>> JSON) {
         String result = "";
         try {
@@ -48,6 +93,7 @@ public class JSONUtils {
         return result;
     }
 
+    @Deprecated(since = "0.2")
     public static List<Map<String, Object>> convertStringtoListOfMap(String jsonString) {
         List<Map<String, Object>> jsonStructure = new ArrayList<>();
         try {
@@ -114,13 +160,13 @@ public class JSONUtils {
         return JsonPath.read(JSONString, filter);
     }
 
+    // todo: rethink
     public static Map<String, Object> convertToFlattenJSON(String JSONString) {
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Object> jsonStructure = new HashMap<>();
         try {
             JsonNode jsonNode = objectMapper.readTree(JSONString);
             addContents("", jsonNode, jsonStructure);
-            System.out.println(jsonStructure);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
