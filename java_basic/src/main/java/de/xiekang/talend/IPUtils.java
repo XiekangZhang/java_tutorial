@@ -4,43 +4,51 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.net.*;
-import java.util.ArrayList;
-import java.util.List;
+
 
 public class IPUtils {
+    static int nMaskBits;
     static final Logger LOGGER = LogManager.getLogger(IPUtils.class.getName());
+    static InetAddress ipRange;
 
-    public static List<String> subnetCalculator(String ipString) {
-        List<String> subnets = new ArrayList<>();
-
-
-        return subnets;
+    public static boolean IPAddressMatcher(String localIP, String IPRangeWithCIDR) {
+        if (IPRangeWithCIDR.indexOf("/") > 0) {
+            String[] addressAndMask = IPRangeWithCIDR.split("/");
+            IPRangeWithCIDR = addressAndMask[0];
+            nMaskBits = Integer.parseInt(addressAndMask[1]);
+        } else {
+            nMaskBits = -1;
+        }
+        ipRange = parseAddress(IPRangeWithCIDR);
+        InetAddress localIPAddress = parseAddress(localIP);
+        LOGGER.info("Local IP Addresse: {}", localIPAddress);
+        if (!ipRange.getClass().equals(localIPAddress.getClass())) {
+            return false;
+        }
+        if (nMaskBits < 0) {
+            return ipRange.equals(localIPAddress);
+        }
+        byte[] localIPAddr = localIPAddress.getAddress();
+        byte[] ipRangeAddr = ipRange.getAddress();
+        int nMaskFullBytes = nMaskBits / 8;
+        byte finalByte = (byte) (0xFF00 >> (nMaskBits & 0x07));
+        for (int i = 0; i < nMaskFullBytes; i++) {
+            if (localIPAddr[i] != ipRangeAddr[i]) {
+                return false;
+            }
+        }
+        if (finalByte != 0) {
+            return (localIPAddr[nMaskFullBytes] & finalByte) == (ipRangeAddr[nMaskFullBytes] & finalByte);
+        }
+        return true;
     }
 
-    public static void main(String... args) {
+    private static InetAddress parseAddress(String address) {
         try {
-            InetAddress localHost = Inet4Address.getLocalHost();
-            NetworkInterface networkInterface = NetworkInterface.getByInetAddress(localHost);
-            List<InterfaceAddress> addressList = networkInterface.getInterfaceAddresses();
-
-            for (InterfaceAddress address: addressList) {
-                System.out.println("IP Address: " + address.getAddress());
-                System.out.println("Subnet Prefix Length: " + address.getNetworkPrefixLength());
-
-                int prefixLength = address.getNetworkPrefixLength();
-                int mask = -1 << (32 - prefixLength);
-                String subnetMask = String.format(
-                        "%d.%d.%d.%d",
-                        (mask >>> 24) & 0xff,
-                        (mask >>> 16) & 0xff,
-                        (mask >>> 8) & 0xff,
-                        mask & 0xff
-                );
-                System.out.println("Subnet Mask: " + subnetMask);
-            }
-
-        } catch (Exception e) {
+            return InetAddress.getByName(address);
+        } catch (UnknownHostException e) {
             LOGGER.error(e.getMessage());
+            throw new RuntimeException(String.format("The given IP {%s} can not be parsed.", address));
         }
     }
 }

@@ -15,4 +15,11 @@ class IPAddressMatcherTest {
         System.out.println(ipAddressMatcher.matches(InetAddress.getLocalHost().getHostAddress()));
     }
 
+    @Test
+    void IPUtils() throws UnknownHostException {
+        String localIP = InetAddress.getLocalHost().getHostAddress();
+        System.out.println(localIP);
+        System.out.println(IPUtils.IPAddressMatcher(localIP, "10.52.128.0/24"));
+    }
+
 }
