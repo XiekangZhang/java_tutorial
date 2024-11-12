@@ -10,3 +10,4 @@ java_jms/target
 java_zookeeper/java_zookeeper.iml
 java_zookeeper/target
 *.iml
+java_beam/target
