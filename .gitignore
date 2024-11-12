@@ -1,13 +1,3 @@
-out
 .idea
-java_tutorial.iml
-everything_about_xml/everything_about_xml.iml
-everything_about_xml/target
-java_basic/java_basic.iml
-java_basic/target
-java_jms/java_jms.iml
-java_jms/target
-java_zookeeper/java_zookeeper.iml
-java_zookeeper/target
-*.iml
-java_beam/target
+*/target
+*/.idea/*
