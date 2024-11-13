@@ -1,4 +1,4 @@
-package de.xiekang.beam.configurations;
+package de.xiekang.beam.introduction;
 
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.io.TextIO;
