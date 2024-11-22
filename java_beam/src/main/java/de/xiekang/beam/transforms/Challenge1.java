@@ -1,9 +1,6 @@
-package de.xiekang.beam;
+package de.xiekang.beam.transforms;
 
 import org.apache.beam.sdk.Pipeline;
-import org.apache.beam.sdk.coders.DoubleCoder;
-import org.apache.beam.sdk.coders.KvCoder;
-import org.apache.beam.sdk.coders.StringUtf8Coder;
 import org.apache.beam.sdk.io.TextIO;
 import org.apache.beam.sdk.options.PipelineOptions;
 import org.apache.beam.sdk.options.PipelineOptionsFactory;
