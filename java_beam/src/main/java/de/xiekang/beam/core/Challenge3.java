@@ -73,8 +73,7 @@ public class Challenge3 {
     static PCollectionTuple separateUppercaseAndLowercase(PCollection<String> input,
                                                           TupleTag<String> uppercaseTag,
                                                           TupleTag<String> lowercaseTag) {
-        List<String> upperCaseWords = new ArrayList<>();
-        List<String> lowerCaseWords = new ArrayList<>();
+
         return input.apply("Separate Uppercase and Lowercase", ParDo.of(new DoFn<String, String>() {
             @ProcessElement
             public void processElement(@Element String element, MultiOutputReceiver multiOutput) {
